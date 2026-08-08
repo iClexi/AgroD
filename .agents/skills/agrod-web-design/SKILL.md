@@ -43,4 +43,3 @@ Construir una experiencia AgriTech dominicana reconocible, accesible y útil. Ha
 5. Probar teclado, foco, etiquetas, mensajes de error y reducción de movimiento.
 6. Buscar emojis, placeholders, datos de contacto falsos, métricas sin fuente y promesas no implementadas.
 7. Comparar capturas de escritorio y móvil con la dirección aceptada y corregir los desajustes visibles antes de entregar.
-

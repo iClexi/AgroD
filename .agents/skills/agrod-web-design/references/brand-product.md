@@ -67,4 +67,3 @@ No publicar matrículas, correos personales, teléfonos inventados ni datos priv
 ## Tiendas de aplicaciones
 
 Mostrar "Próximamente en App Store" y "Próximamente en Google Play" mientras no existan fichas públicas verificables. No insinuar disponibilidad actual.
-

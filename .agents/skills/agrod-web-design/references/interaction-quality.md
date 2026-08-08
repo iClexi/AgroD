@@ -57,4 +57,3 @@
 - Verificar ausencia de overlays de error, errores de consola, enlaces vacíos y botones inertes.
 - Recorrer registro, sesión, creación de cultivo, creación de dispositivo, asociación, mapa, ruta, zumbido y cierre de sesión.
 - Reiniciar el servidor y confirmar que los datos persistan.
-

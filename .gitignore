@@ -12,6 +12,7 @@ node_modules/
 out/
 coverage/
 *.log
+*.tsbuildinfo
 
 # Runtime data and secrets
 .env*
