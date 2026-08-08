@@ -1,0 +1,15 @@
+{
+  "date": "2026-08-08",
+  "items": [
+    {
+      "finding": "Vulnerable build-time transitive packages reported before remediation",
+      "reachabilityBeforeFix": "INTERNAL",
+      "exploitabilityBeforeFix": "HARD",
+      "attackerControl": "Required control of local build inputs or tool invocation; no public HTTP route imported the affected packages.",
+      "impact": "Build process denial of service or file disclosure, not a directly reachable production route.",
+      "mitigations": ["Unused shadcn toolchain removed", "PostCSS upgraded", "brace-expansion overridden to 5.0.9"],
+      "status": "resolved",
+      "postFixEvidence": "pnpm audit --json: zero advisories"
+    }
+  ]
+}

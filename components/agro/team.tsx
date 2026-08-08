@@ -1,0 +1,8 @@
+const members = [
+  { initials: 'MR', name: 'Michael David Robles Fermín', role: 'Gestión y Coordinación' },
+  { initials: 'SB', name: 'Sussette Denyse Botero Morán', role: 'Diseño, Branding y Mercadeo' },
+  { initials: 'LA', name: 'Luis Miguel Araujo Reynoso', role: 'IoT y Mecatrónica' },
+  { initials: 'DP', name: 'Dionela Salomé Pérez Mateo', role: 'Ciberseguridad y Protección de Datos' },
+]
+
+export function Team() { return <section id="equipo" className="bg-white py-24 lg:py-32"><div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10"><div className="grid gap-8 lg:grid-cols-[.7fr_1.3fr] lg:items-end"><div><p className="section-kicker">Conoce al equipo</p><h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-[#071f42] text-balance sm:text-5xl">Cuatro áreas. Una misma finca.</h2></div><p className="max-w-2xl text-lg leading-8 text-[#536071] lg:justify-self-end">AgroD reúne coordinación, diseño, mecatrónica y ciberseguridad para convertir una idea académica en un producto demostrable.</p></div><ul className="mt-14 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{members.map((member) => <li key={member.name} className="group rounded-[1.5rem] border border-[#dce8de] p-6 transition hover:border-[#167a35]"><span className="flex size-16 items-center justify-center rounded-2xl bg-[#071f42] font-display text-xl font-extrabold text-[#8ed09f]">{member.initials}</span><h3 className="mt-6 font-display text-xl font-bold leading-7 text-[#172033]">{member.name}</h3><p className="mt-3 text-base leading-6 text-[#5f6978]">{member.role}</p></li>)}</ul></div></section> }

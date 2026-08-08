@@ -1,0 +1,13 @@
+{
+  "scanMode": "full",
+  "framework": "Next.js 16 App Router",
+  "language": "TypeScript",
+  "dataStore": "SQLite via node:sqlite",
+  "authentication": "custom opaque sessions",
+  "publicEntryPoints": ["/", "/registro", "/iniciar-sesion", "/api/demo-requests", "/api/health"],
+  "authenticatedEntryPoints": ["/panel", "/api/farms", "/api/plants", "/api/devices"],
+  "severityThreshold": "medium",
+  "requireOwnerFilter": true,
+  "requireCsrfCheckOnMutations": true,
+  "maxJsonBytes": 64000
+}

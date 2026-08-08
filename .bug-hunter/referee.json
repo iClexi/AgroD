@@ -1,0 +1,12 @@
+{
+  "verdict": "pass",
+  "openHigh": 0,
+  "openCritical": 0,
+  "evidence": [
+    "Unauthenticated API request returned 401.",
+    "Cross-owner read excluded the other owner's farm.",
+    "Cross-owner update returned 404.",
+    "Cross-site mutation returned 403.",
+    "Dependency audit returned zero known vulnerabilities."
+  ]
+}

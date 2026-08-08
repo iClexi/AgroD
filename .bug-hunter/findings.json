@@ -1,0 +1,24 @@
+{
+  "scanMode": "full",
+  "date": "2026-08-08",
+  "openFindings": [],
+  "resolvedDuringReview": [
+    {
+      "severity": "high",
+      "category": "supply-chain",
+      "summary": "Vulnerable transitive development dependencies",
+      "resolution": "Removed unused shadcn and UI packages, updated PostCSS and pinned patched brace-expansion 5.0.9."
+    },
+    {
+      "severity": "medium",
+      "category": "reliability",
+      "summary": "SQLite buzz history row was not serializable across the server-client boundary",
+      "resolution": "Normalized every buzz command to a plain object before returning it."
+    }
+  ],
+  "residualNotes": [
+    "Rate limiting is process-local and is appropriate for the documented single-instance deployment.",
+    "A production reverse proxy must overwrite forwarding headers and keep port 3000 private.",
+    "The physical IoT command channel is not implemented and needs its own security design."
+  ]
+}

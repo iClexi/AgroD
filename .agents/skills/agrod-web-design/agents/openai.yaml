@@ -1,0 +1,4 @@
+interface:
+  display_name: "AgroD Web Design"
+  short_description: "Diseña experiencias web coherentes para AgroD"
+  default_prompt: "Usa $agrod-web-design para diseñar o revisar una experiencia web accesible y fiel a AgroD."

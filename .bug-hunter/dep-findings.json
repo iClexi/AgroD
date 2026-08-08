@@ -1,0 +1,14 @@
+{
+  "scan_date": "2026-08-08T06:05:00Z",
+  "ecosystems": ["node"],
+  "lockfiles": ["pnpm-lock.yaml"],
+  "findings": [],
+  "summary": {
+    "total": 0,
+    "reachable": 0,
+    "potentially_reachable": 0,
+    "not_reachable": 0
+  },
+  "scan_errors": [],
+  "evidence": "pnpm audit --json returned zero vulnerabilities after dependency pruning, PostCSS update and brace-expansion override"
+}
