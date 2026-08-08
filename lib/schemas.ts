@@ -6,21 +6,62 @@ const shortText = (label: string, max: number) =>
 const nullableReading = (min: number, max: number) =>
   z.number().finite().min(min).max(max).nullable().optional().default(null)
 
+const passwordSchema = z
+  .string()
+  .min(10, 'La contraseña debe tener al menos 10 caracteres.')
+  .max(128)
+  .regex(/[A-Za-z]/, 'Incluye al menos una letra.')
+  .regex(/[0-9]/, 'Incluye al menos un número.')
+
+const fullNameFits = (value: { firstName: string; lastName: string }) =>
+  `${value.firstName} ${value.lastName}`.trim().length <= 100
+
 export const registerSchema = z.object({
-  fullName: shortText('El nombre', 100),
+  firstName: shortText('El nombre', 50),
+  lastName: shortText('El apellido', 70),
   email: z.string().trim().toLowerCase().email('Escribe un correo válido.').max(160),
-  password: z
-    .string()
-    .min(10, 'La contraseña debe tener al menos 10 caracteres.')
-    .max(128)
-    .regex(/[A-Za-z]/, 'Incluye al menos una letra.')
-    .regex(/[0-9]/, 'Incluye al menos un número.'),
+  password: passwordSchema,
   includeDemo: z.boolean().optional().default(true),
+}).refine(fullNameFits, {
+  message: 'El nombre y el apellido juntos no pueden superar 100 caracteres.',
+  path: ['lastName'],
 })
 
 export const loginSchema = z.object({
   email: z.string().trim().toLowerCase().email().max(160),
   password: z.string().min(1).max(128),
+})
+
+export const profileSchema = z.object({
+  firstName: shortText('El nombre', 50),
+  lastName: shortText('El apellido', 70),
+  email: z.string().trim().toLowerCase().email('Escribe un correo válido.').max(160),
+  birthDate: z.string().trim().regex(/^\d{4}-\d{2}-\d{2}$/, 'Escribe una fecha válida.').nullable(),
+  phone: z.string().trim().max(30).refine((value) => !value || /^[+0-9() -]+$/.test(value), 'Escribe un teléfono válido.'),
+  province: z.string().trim().max(80),
+  municipality: z.string().trim().max(80),
+  producerRole: z.enum(['Propietario o encargado', 'Productor', 'Técnico agrícola', 'Agrónomo', 'Colaborador']),
+  primaryCrop: z.string().trim().max(100),
+  products: z.array(z.string().trim().min(1).max(80)).max(20),
+  preferredContact: z.enum(['email', 'whatsapp', 'phone']),
+  notifyEmail: z.boolean(),
+  notifyWhatsapp: z.boolean(),
+})
+  .refine(fullNameFits, {
+    message: 'El nombre y el apellido juntos no pueden superar 100 caracteres.',
+    path: ['lastName'],
+  })
+  .refine((value) => !value.birthDate || value.birthDate <= new Date().toISOString().slice(0, 10), {
+    message: 'La fecha de nacimiento no puede estar en el futuro.',
+    path: ['birthDate'],
+  })
+
+export const passwordChangeSchema = z.object({
+  currentPassword: z.string().min(1).max(128),
+  newPassword: passwordSchema,
+}).refine((value) => value.currentPassword !== value.newPassword, {
+  message: 'La nueva contraseña debe ser diferente.',
+  path: ['newPassword'],
 })
 
 export const farmSchema = z.object({
@@ -78,16 +119,6 @@ export const plantUpdateSchema = plantSchema.partial().omit({ farmId: true }).re
   (value) => Object.keys(value).length > 0,
   'Incluye al menos un campo para actualizar.',
 )
-
-export const demoRequestSchema = z.object({
-  name: shortText('El nombre', 100),
-  phone: z.string().trim().min(7).max(30).regex(/^[+0-9() -]+$/, 'Escribe un teléfono válido.'),
-  email: z.string().trim().toLowerCase().email('Escribe un correo válido.').max(160),
-  province: shortText('La provincia', 80),
-  crop: shortText('El cultivo', 100),
-  farmSize: z.string().trim().min(1).max(80),
-  message: z.string().trim().max(2000).optional().default(''),
-})
 
 export function firstZodError(error: z.ZodError): string {
   return error.issues[0]?.message || 'Revisa los datos enviados.'

@@ -1,10 +1,22 @@
 import { Clock3, Compass, Gauge, Search } from 'lucide-react'
+import { Reveal } from './reveal'
 
-const items = [
-  { icon: Search, title: 'Menos recorridos a ciegas', text: 'Consulta el estado registrado y dirige la inspección hacia las zonas que más lo necesitan.' },
-  { icon: Gauge, title: 'Mejor uso de recursos', text: 'Compara humedad y otras variables antes de decidir sobre riego e insumos.' },
-  { icon: Clock3, title: 'Decisiones a tiempo', text: 'Recibe señales claras cuando una lectura sale del rango que definiste.' },
-  { icon: Compass, title: 'La planta correcta', text: 'Ubica cada zona en el plano y solicita el zumbido del dispositivo compatible.' },
+const benefits = [
+  { icon: Search, title: 'Menos recorridos a ciegas', text: 'Consulta la finca antes de salir y dirige la inspección hacia las zonas que requieren atención.' },
+  { icon: Gauge, title: 'Mejor uso de recursos', text: 'Compara humedad, temperatura y estado del cultivo antes de decidir sobre riego e insumos.' },
+  { icon: Clock3, title: 'Decisiones a tiempo', text: 'Recibe señales claras cuando una lectura sale del rango y registra lo que hiciste.' },
+  { icon: Compass, title: 'Encuentra la zona correcta', text: 'Ubica cada cultivo en el mapa y activa el zumbador del dispositivo compatible para localizarlo.' },
 ]
 
-export function Benefits() { return <section id="beneficios" className="bg-white py-24 lg:py-32"><div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10"><div className="max-w-4xl"><p className="section-kicker">Beneficios</p><h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-[#071f42] text-balance sm:text-5xl lg:text-6xl">Más control. Menos incertidumbre.</h2></div><div className="mt-14 grid border-y border-[#dce8de] md:grid-cols-2 xl:grid-cols-4">{items.map((item,index) => { const Icon=item.icon; return <article key={item.title} className={`py-8 md:p-8 ${index > 0 ? 'border-t border-[#dce8de] md:border-t-0' : ''} ${index % 2 ? 'md:border-l' : ''} ${index > 1 ? 'xl:border-l' : ''}`}><Icon aria-hidden="true" className="size-7 text-[#167a35]" /><h3 className="mt-6 font-display text-2xl font-bold">{item.title}</h3><p className="mt-4 text-lg leading-7 text-[#5f6978]">{item.text}</p></article> })}</div></div></section> }
+export function Benefits() {
+  return (
+    <section id="beneficios" className="py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <Reveal className="max-w-2xl"><p className="text-sm font-semibold uppercase tracking-wider text-primary">Beneficios</p><h2 className="mt-3 text-balance font-display text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">Tecnología que trabaja con la tierra</h2></Reveal>
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {benefits.map((benefit, index) => <Reveal key={benefit.title} delay={index * 100} className="group flex flex-col rounded-2xl border border-border/70 bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg"><span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors duration-300 group-hover:bg-primary group-hover:text-primary-foreground"><benefit.icon aria-hidden="true" className="h-6 w-6" /></span><h3 className="mt-6 font-display text-xl font-bold text-foreground">{benefit.title}</h3><p className="mt-3 text-pretty leading-relaxed text-muted-foreground">{benefit.text}</p></Reveal>)}
+        </div>
+      </div>
+    </section>
+  )
+}

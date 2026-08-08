@@ -1,33 +1,103 @@
-import Image from 'next/image'
+'use client'
+
 import Link from 'next/link'
-import { ArrowRight, Droplets, Radio, TriangleAlert } from 'lucide-react'
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { ArrowRight, Droplets, Play, Thermometer } from 'lucide-react'
+
+const evidence = [
+  { value: '10/12', label: 'dependían del monitoreo manual' },
+  { value: '9/12', label: 'indicaron que reaccionaban tarde' },
+  { value: '24/7', label: 'seguimiento disponible en la plataforma' },
+]
 
 export function Hero() {
-  return <section id="inicio" className="relative min-h-[760px] overflow-hidden bg-white pt-[76px] lg:min-h-[900px]">
-    <div aria-hidden="true" className="field-lines pointer-events-none absolute inset-0 opacity-35" />
-    <div className="mx-auto grid min-h-[calc(100vh-76px)] w-full max-w-[1480px] items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[minmax(0,.88fr)_minmax(560px,1.12fr)] lg:px-8 lg:py-16 xl:px-10">
-      <div className="relative z-10 max-w-3xl">
-        <p className="section-kicker">Tecnología para el campo dominicano</p>
-        <h1 className="mt-5 font-display text-[clamp(3.2rem,6.4vw,6.7rem)] font-extrabold leading-[.98] tracking-[-.055em] text-[#071f42] text-balance">Monitorea tus cultivos. <span className="text-[#167a35]">Decide a tiempo.</span></h1>
-        <p className="mt-7 max-w-2xl text-xl leading-8 text-[#536071] sm:text-2xl sm:leading-9">AgroD conecta sensores en tu finca con alertas claras, recomendaciones prácticas y una ruta para revisar primero lo que más importa.</p>
-        <div className="mt-9 flex flex-col gap-3 sm:flex-row"><a href="#contacto" className="primary-button min-h-14 px-7 text-base">Solicitar demostración<ArrowRight aria-hidden="true" className="size-5" /></a><Link href="/registro" className="secondary-button min-h-14 px-7 text-base">Probar el panel</Link></div>
-        <ul className="mt-10 grid gap-3 text-base font-bold text-[#172033] sm:grid-cols-3">
-          <li className="hero-proof"><Droplets aria-hidden="true" className="size-5 text-[#167a35]" />Humedad del suelo</li>
-          <li className="hero-proof"><Radio aria-hidden="true" className="size-5 text-[#167a35]" />Sensores vinculados</li>
-          <li className="hero-proof"><TriangleAlert aria-hidden="true" className="size-5 text-[#167a35]" />Alertas accionables</li>
-        </ul>
-      </div>
+  const [offset, setOffset] = useState(0)
 
-      <div className="relative min-h-[500px] lg:min-h-[720px]">
-        <div className="absolute inset-0 overflow-hidden rounded-[2.25rem] shadow-[0_50px_100px_-55px_rgba(7,31,66,.65)]">
-          <Image src="/images/hero-field.png" alt="Finca organizada con un sensor agrícola instalado entre los cultivos" fill priority sizes="(max-width: 1024px) 100vw, 58vw" className="object-cover" />
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#071f42]/65 to-transparent" />
-        </div>
-        <div className="absolute bottom-5 left-4 right-4 grid gap-3 sm:left-6 sm:right-6 sm:grid-cols-2 xl:bottom-8 xl:left-8 xl:right-8">
-          <div className="data-float"><span className="data-float-icon"><Droplets aria-hidden="true" className="size-5" /></span><span><strong>Riego recomendado</strong><small>Tomate Norte · Humedad 31%</small></span></div>
-          <div className="data-float"><span className="data-float-icon bg-[#eef5ff] text-[#0b3768]"><TriangleAlert aria-hidden="true" className="size-5" /></span><span><strong>Revisión prioritaria</strong><small>Ají Sur · Lectura de demostración</small></span></div>
+  useEffect(() => {
+    let raf = 0
+    const onScroll = () => {
+      window.cancelAnimationFrame(raf)
+      raf = window.requestAnimationFrame(() => setOffset(Math.min(window.scrollY * 0.15, 120)))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  return (
+    <section id="inicio" className="relative overflow-hidden pt-28 md:pt-32">
+      <div aria-hidden="true" className="organic-hero-bg pointer-events-none absolute inset-x-0 top-0 -z-10 h-[540px]" />
+
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="hero-copy-in">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="signal-ping absolute inline-flex h-full w-full rounded-full bg-primary" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
+              </span>
+              AgriTech Dominicana
+            </span>
+
+            <h1 className="mt-6 text-balance font-display text-5xl font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-6xl lg:text-[4.2rem]">
+              Monitorea tus cultivos. <span className="text-primary">Decide a tiempo.</span>
+            </h1>
+
+            <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
+              AgroD conecta sensores instalados en tu finca con una plataforma sencilla. Ves qué ocurre, qué cultivo revisar primero y dónde encontrarlo.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a href="#demo" className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+                Explorar la demo
+                <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </a>
+              <a href="#como-funciona" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card px-7 text-sm font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40">
+                <Play aria-hidden="true" className="h-4 w-4 text-primary" />
+                Ver cómo funciona
+              </a>
+              <Link href="/registro" className="text-center text-sm font-bold text-navy underline-offset-4 hover:underline sm:px-2">Crear cuenta</Link>
+            </div>
+
+            <dl className="mt-12 grid max-w-lg grid-cols-3 gap-5 border-t border-border/70 pt-6">
+              {evidence.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="font-display text-2xl font-bold text-navy">{stat.value}</dt>
+                  <dd className="mt-1 text-xs leading-snug text-muted-foreground">{stat.label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="hero-visual-in relative">
+            <div className="relative overflow-hidden rounded-3xl border border-border/60 shadow-[0_30px_80px_-40px_rgba(20,40,30,0.45)]">
+              <Image
+                src="/images/hero-field.png"
+                alt="Cultivos organizados con un dispositivo de monitoreo AgroD"
+                width={1536}
+                height={1024}
+                className="h-[420px] w-full object-cover md:h-[520px]"
+                style={{ transform: `translateY(-${offset * 0.4}px) scale(1.08)` }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/25 via-transparent to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 flex flex-wrap gap-3">
+                <div className="flex items-center gap-3 rounded-2xl border border-border/50 bg-card/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground"><Droplets aria-hidden="true" className="h-4.5 w-4.5" /></span>
+                  <div><p className="text-xs font-semibold text-foreground">Riego recomendado</p><p className="text-[11px] text-muted-foreground">Tomate Norte · Humedad 31%</p></div>
+                </div>
+                <div className="flex items-center gap-3 rounded-2xl border border-border/50 bg-card/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy/10 text-navy"><Thermometer aria-hidden="true" className="h-4.5 w-4.5" /></span>
+                  <div><p className="text-xs font-semibold text-foreground">29 °C</p><p className="text-[11px] text-muted-foreground">Lectura reciente</p></div>
+                </div>
+              </div>
+            </div>
+            <div aria-hidden="true" className="absolute -left-4 top-10 hidden h-20 w-20 rounded-2xl border border-primary/20 bg-primary/5 md:block" />
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  )
 }

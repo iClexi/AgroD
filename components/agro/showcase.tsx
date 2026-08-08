@@ -1,10 +1,90 @@
-import { Bell, CloudSun, Droplets, MapPinned, Radio, Route, Sprout, ThermometerSun } from 'lucide-react'
+'use client'
 
-export function Showcase() {
-  return <section id="producto" className="overflow-hidden bg-[#f2f8f3] py-24 lg:py-32"><div className="mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-8 xl:px-10"><div className="grid gap-8 lg:grid-cols-[.72fr_1.28fr] lg:items-end"><div><p className="section-kicker">La plataforma</p><h2 className="mt-4 font-display text-4xl font-extrabold leading-tight text-[#071f42] text-balance sm:text-5xl lg:text-6xl">Toda tu finca en una sola vista.</h2></div><p className="max-w-2xl text-xl leading-8 text-[#536071] lg:justify-self-end">Mide, ubica y prioriza. La interfaz está pensada para entenderse rápido en el teléfono o en la computadora.</p></div>
-    <div className="mt-14 overflow-hidden rounded-[2rem] border border-[#cfe0d2] bg-white shadow-[0_45px_100px_-65px_rgba(7,31,66,.6)]"><div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#dce8de] px-5 py-4 sm:px-7"><LogoLine /><span className="demo-badge">Vista de demostración</span></div><div className="grid min-h-[650px] lg:grid-cols-[230px_minmax(0,1fr)]"><aside className="hidden border-r border-[#dce8de] bg-[#071f42] p-5 text-white lg:block"><p className="text-xs font-bold uppercase tracking-[.16em] text-white/50">Finca demostrativa</p><nav className="mt-5 space-y-2" aria-label="Vista de muestra">{[[MapPinned,'Resumen'],[Sprout,'Cultivos'],[Radio,'Dispositivos'],[Bell,'Alertas'],[Route,'Ruta de inspección']].map(([Icon,label], index) => { const IconElement = Icon as typeof MapPinned; return <span key={String(label)} className={`flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-bold ${index === 0 ? 'bg-white text-[#071f42]' : 'text-white/65'}`}><IconElement aria-hidden="true" className="size-5" />{String(label)}</span> })}</nav></aside><div className="p-4 sm:p-7 lg:p-9"><div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between"><div><p className="text-sm font-bold text-[#167a35]">La Vega · Datos ilustrativos</p><h3 className="mt-2 font-display text-3xl font-extrabold text-[#172033]">Buenos días. Esta es tu prioridad.</h3></div><span className="device-state device-online">2 dispositivos en línea</span></div><div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4"><SampleMetric icon={Droplets} label="Humedad" value="41%" note="Promedio de muestra" /><SampleMetric icon={ThermometerSun} label="Temperatura" value="29 °C" note="Lectura ilustrativa" /><SampleMetric icon={CloudSun} label="Riesgo" value="Medio" note="Requiere observación" /><SampleMetric icon={Sprout} label="Cultivo" value="Estable" note="Según rangos definidos" /></div><div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_.85fr]"><div className="rounded-2xl border border-[#dce8de] p-5"><div className="flex items-center justify-between"><h4 className="font-display text-xl font-bold">Finca virtual</h4><span className="text-sm font-bold text-[#167a35]">Ruta activa</span></div><div className="mini-farm mt-5"><span className="mini-marker marker-one">1</span><span className="mini-marker marker-two">2</span><span className="mini-marker marker-three">3</span></div></div><div className="rounded-2xl bg-[#071f42] p-5 text-white"><h4 className="font-display text-xl font-bold">Recomendaciones para hoy</h4><ol className="mt-5 space-y-4">{['Revisar humedad en Ají Sur','Confirmar riego en Tomate Norte','Mantener seguimiento en Plátano Este'].map((text,index) => <li key={text} className="flex gap-3"><span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-[#167a35] text-sm font-extrabold">{index+1}</span><span className="pt-1 text-sm leading-6 text-white/75">{text}</span></li>)}</ol></div></div></div></div></div>
-  </div></section>
+import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { AlertTriangle, Bell, CheckCircle2, CloudSun, Droplets, Signal, Sprout, ThermometerSun } from 'lucide-react'
+import { Logo } from './logo'
+import { Reveal } from './reveal'
+
+const bars = [42, 55, 48, 63, 58, 71, 66, 52]
+
+function useInView<T extends HTMLElement>() {
+  const ref = useRef<T | null>(null)
+  const [inView, setInView] = useState(false)
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setInView(true)
+        observer.disconnect()
+      }
+    }, { threshold: 0.3 })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
+  return { ref, inView }
 }
 
-function LogoLine() { return <div className="flex items-center gap-3"><span className="flex size-10 items-center justify-center rounded-xl bg-[#071f42] text-[#8ed09f]"><Sprout aria-hidden="true" className="size-5" /></span><span className="font-display text-lg font-extrabold">AgroD</span></div> }
-function SampleMetric({ icon: Icon, label, value, note }: { icon: typeof Droplets; label: string; value: string; note: string }) { return <div className="rounded-2xl bg-[#f6f8fa] p-5"><Icon aria-hidden="true" className="size-5 text-[#167a35]" /><p className="mt-4 text-sm font-bold text-[#687282]">{label}</p><p className="mt-2 font-display text-2xl font-extrabold">{value}</p><p className="mt-1 text-xs text-[#687282]">{note}</p></div> }
+function Gauge({ value, active }: { value: number; active: boolean }) {
+  const radius = 42
+  const circumference = 2 * Math.PI * radius
+  const shown = active ? value : 0
+  return (
+    <div className="relative h-28 w-28">
+      <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90" aria-hidden="true">
+        <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--muted)" strokeWidth="8" />
+        <circle cx="50" cy="50" r={radius} fill="none" stroke="var(--primary)" strokeWidth="8" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference - (circumference * shown) / 100} style={{ transition: 'stroke-dashoffset 1.4s cubic-bezier(0.22,1,0.36,1)' }} />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center"><span className="font-display text-2xl font-bold text-foreground">{shown}%</span><span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">Humedad</span></div>
+    </div>
+  )
+}
+
+export function Showcase() {
+  const { ref, inView } = useInView<HTMLDivElement>()
+  return (
+    <section id="plataforma" className="relative overflow-hidden py-24 md:py-32">
+      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-secondary/40" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-background to-transparent" />
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
+        <Reveal className="max-w-2xl"><p className="text-sm font-semibold uppercase tracking-wider text-primary">La plataforma</p><h2 className="mt-3 text-balance font-display text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">Tus cultivos, claros de un vistazo</h2><p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">Humedad, temperatura, estado de cada zona y dispositivos conectados. AgroD ordena la información para que sepas dónde comenzar.</p></Reveal>
+
+        <div ref={ref} className="relative mt-14">
+          <Reveal>
+            <div className="overflow-hidden rounded-3xl border border-border/70 bg-card shadow-[0_40px_100px_-50px_rgba(20,40,30,0.5)]">
+              <div className="flex items-center justify-between border-b border-border/70 px-5 py-3 md:px-7"><Logo compact /><div className="hidden items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-medium text-secondary-foreground sm:flex"><Signal aria-hidden="true" className="h-3.5 w-3.5 text-primary" />Finca demostrativa · 2 equipos conectados</div><div className="flex items-center gap-2"><span className="relative flex h-2 w-2"><span className="signal-ping absolute inline-flex h-full w-full rounded-full bg-primary" /><span className="relative inline-flex h-2 w-2 rounded-full bg-primary" /></span><span className="text-xs font-medium text-muted-foreground">En vivo</span></div></div>
+              <div className="grid gap-5 p-5 md:grid-cols-3 md:p-7">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-border/70 bg-background p-6"><Gauge value={41} active={inView} /><div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground"><Droplets aria-hidden="true" className="h-4 w-4 text-primary" />Tomate Norte</div></div>
+                <div className="flex flex-col gap-5">
+                  <Metric icon={<ThermometerSun className="h-5 w-5" />} label="Temperatura" value="29 °C" tone="accent" />
+                  <Metric icon={<CloudSun className="h-5 w-5" />} label="Condición" value="Atención moderada" tone="navy" />
+                </div>
+                <div className="rounded-2xl border border-border/70 bg-background p-5"><div className="flex items-center justify-between"><p className="text-xs uppercase tracking-wide text-muted-foreground">Humedad · 8 h</p><span className="text-xs font-semibold text-primary">+6%</span></div><div className="mt-4 flex h-24 items-end gap-2">{bars.map((bar, index) => <div key={index} className="flex-1 rounded-t bg-primary/80" style={{ height: inView ? `${bar}%` : '0%', transition: `height 1s cubic-bezier(0.22,1,0.36,1) ${index * 70}ms` }} />)}</div></div>
+                <div className="rounded-2xl border border-border/70 bg-background p-5 md:col-span-2"><p className="mb-4 flex items-center gap-2 text-sm font-semibold text-foreground"><Sprout aria-hidden="true" className="h-4 w-4 text-primary" />Estado de cultivos</p><ul className="space-y-3"><CropStatus name="Ají Sur" label="Revisión prioritaria" tone="alert" /><CropStatus name="Tomate Norte" label="Revisar riego" tone="warn" /><CropStatus name="Plátano Este" label="Cultivo estable" tone="ok" /></ul></div>
+                <div className="flex flex-col justify-between rounded-2xl bg-navy p-5 text-navy-foreground"><div className="flex items-center gap-2"><Bell aria-hidden="true" className="h-4 w-4" /><p className="text-sm font-semibold">Prioridades de hoy</p></div><p className="mt-4 font-display text-4xl font-bold">3</p><p className="mt-1 text-sm text-navy-foreground/70">1 crítica · 1 atención · 1 estable</p></div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal delay={200} className="absolute -bottom-10 right-4 hidden w-52 lg:block">
+            <div className="overflow-hidden rounded-[2rem] border-4 border-navy bg-card shadow-2xl"><div className="bg-navy px-4 py-2.5 text-navy-foreground"><p className="text-[10px] uppercase tracking-wide text-navy-foreground/70">AgroD móvil</p><p className="text-sm font-semibold">Alertas</p></div><div className="space-y-2.5 p-3"><MobileAlert icon={<Droplets className="h-3.5 w-3.5" />} tone="warn" title="Revisar riego" sub="Tomate Norte" /><MobileAlert icon={<AlertTriangle className="h-3.5 w-3.5" />} tone="alert" title="Inspección prioritaria" sub="Ají Sur" /><MobileAlert icon={<CheckCircle2 className="h-3.5 w-3.5" />} tone="ok" title="Cultivo estable" sub="Plátano Este" /></div></div>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Metric({ icon, label, value, tone }: { icon: ReactNode; label: string; value: string; tone: 'accent' | 'navy' }) {
+  return <div className="flex items-center gap-4 rounded-2xl border border-border/70 bg-background p-5"><span className={`flex h-11 w-11 items-center justify-center rounded-xl ${tone === 'accent' ? 'bg-accent text-accent-foreground' : 'bg-navy/10 text-navy'}`}>{icon}</span><div><p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p><p className="font-display text-lg font-bold text-foreground">{value}</p></div></div>
+}
+
+function CropStatus({ name, label, tone }: { name: string; label: string; tone: 'warn' | 'alert' | 'ok' }) {
+  const styles = { warn: 'bg-accent text-accent-foreground', alert: 'bg-destructive/12 text-destructive', ok: 'bg-primary/12 text-primary' }
+  return <li className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-4 py-3"><span className="text-sm text-foreground">{name}</span><span className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-semibold ${styles[tone]}`}>{label}</span></li>
+}
+
+function MobileAlert({ icon, tone, title, sub }: { icon: ReactNode; tone: 'warn' | 'alert' | 'ok'; title: string; sub: string }) {
+  const styles = { warn: 'bg-accent text-accent-foreground', alert: 'bg-destructive/12 text-destructive', ok: 'bg-primary/12 text-primary' }
+  return <div className="flex items-center gap-2.5 rounded-xl border border-border/70 bg-background p-2.5"><span className={`flex h-7 w-7 items-center justify-center rounded-lg ${styles[tone]}`}>{icon}</span><div className="min-w-0"><p className="truncate text-[11px] font-semibold text-foreground">{title}</p><p className="truncate text-[10px] text-muted-foreground">{sub}</p></div></div>
+}

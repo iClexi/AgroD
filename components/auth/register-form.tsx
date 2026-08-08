@@ -20,7 +20,8 @@ export function RegisterForm() {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({
-          fullName: data.get('fullName'),
+          firstName: data.get('firstName'),
+          lastName: data.get('lastName'),
           email: data.get('email'),
           password: data.get('password'),
           includeDemo: data.get('includeDemo') === 'on',
@@ -41,10 +42,10 @@ export function RegisterForm() {
       {error ? (
         <div role="alert" className="rounded-xl border border-[#d8483e]/25 bg-[#fff3f1] px-4 py-3 text-sm font-semibold text-[#a52f28]">{error}</div>
       ) : null}
-      <label className="block">
-        <span className="text-sm font-bold text-[#172033]">Nombre completo</span>
-        <input className="form-input mt-2" name="fullName" autoComplete="name" required minLength={2} maxLength={100} placeholder="Tu nombre y apellido" />
-      </label>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <label className="block"><span className="text-sm font-bold text-[#172033]">Nombre</span><input className="form-input mt-2" name="firstName" autoComplete="given-name" required minLength={2} maxLength={50} placeholder="Tu nombre" /></label>
+        <label className="block"><span className="text-sm font-bold text-[#172033]">Apellido</span><input className="form-input mt-2" name="lastName" autoComplete="family-name" required minLength={2} maxLength={70} placeholder="Tu apellido" /></label>
+      </div>
       <label className="block">
         <span className="text-sm font-bold text-[#172033]">Correo electrónico</span>
         <input className="form-input mt-2" name="email" type="email" inputMode="email" autoComplete="email" required maxLength={160} placeholder="nombre@correo.com" />
@@ -70,7 +71,7 @@ export function RegisterForm() {
         {pending ? <LoaderCircle aria-hidden="true" className="size-5 animate-spin" /> : null}
         {pending ? 'Creando cuenta…' : 'Crear cuenta'}
       </button>
-      <p className="text-sm leading-6 text-[#6b7483]">Al crear tu cuenta aceptas usar AgroD como prototipo demostrativo. Las lecturas incluidas no provienen de sensores físicos.</p>
+      <p className="text-sm leading-6 text-[#6b7483]">Los datos de muestra sirven para conocer la plataforma. Cuando conectes equipos reales, tus lecturas quedarán separadas de la demostración.</p>
     </form>
   )
 }

@@ -8,6 +8,7 @@ import type {
   Device,
   Farm,
   Plant,
+  User,
 } from '@/lib/types'
 import type {
   deviceSchema,
@@ -16,6 +17,7 @@ import type {
   farmUpdateSchema,
   plantSchema,
   plantUpdateSchema,
+  profileSchema,
 } from '@/lib/schemas'
 import type { z } from 'zod'
 
@@ -25,6 +27,7 @@ type DeviceInput = z.infer<typeof deviceSchema>
 type DeviceUpdate = z.infer<typeof deviceUpdateSchema>
 type PlantInput = z.infer<typeof plantSchema>
 type PlantUpdate = z.infer<typeof plantUpdateSchema>
+type ProfileInput = z.infer<typeof profileSchema>
 
 type FarmRow = Omit<Farm, 'isDemo'> & { isDemo: number }
 type DeviceRow = Omit<Device, 'supportsBuzzer' | 'isDemo'> & {
@@ -32,6 +35,19 @@ type DeviceRow = Omit<Device, 'supportsBuzzer' | 'isDemo'> & {
   isDemo: number
 }
 type PlantRow = Omit<Plant, 'isDemo'> & { isDemo: number }
+type UserRow = Omit<User, 'products' | 'notifyEmail' | 'notifyWhatsapp'> & {
+  products: string
+  notifyEmail: number
+  notifyWhatsapp: number
+}
+
+const userColumns = `
+  id, full_name AS fullName, first_name AS firstName, last_name AS lastName,
+  email, birth_date AS birthDate, phone, province, municipality,
+  producer_role AS producerRole, primary_crop AS primaryCrop, products,
+  preferred_contact AS preferredContact, notify_email AS notifyEmail,
+  notify_whatsapp AS notifyWhatsapp, created_at AS createdAt, updated_at AS updatedAt
+`
 
 const farmColumns = `
   id, name, province, rows_count AS rows, columns_count AS columns,
@@ -62,6 +78,20 @@ function mapPlant(row: PlantRow): Plant {
   return { ...row, isDemo: Boolean(row.isDemo) }
 }
 
+function mapUser(row: UserRow): User {
+  return {
+    ...row,
+    products: row.products.split(',').map((item) => item.trim()).filter(Boolean),
+    notifyEmail: Boolean(row.notifyEmail),
+    notifyWhatsapp: Boolean(row.notifyWhatsapp),
+  }
+}
+
+export function getUserProfile(id: string): User | null {
+  const row = getDb().prepare(`SELECT ${userColumns} FROM users WHERE id = ? LIMIT 1`).get(id) as unknown as UserRow | undefined
+  return row ? mapUser(row) : null
+}
+
 function readFarm(ownerId: string, id: string): Farm | null {
   const row = getDb().prepare(`SELECT ${farmColumns} FROM farms WHERE id = ? AND owner_id = ?`).get(id, ownerId)
   return row ? mapFarm(row as unknown as FarmRow) : null
@@ -85,7 +115,8 @@ export function findCredentials(email: string): { id: string; passwordHash: stri
 }
 
 export function createAccount(input: {
-  fullName: string
+  firstName: string
+  lastName: string
   email: string
   passwordHash: string
   includeDemo: boolean
@@ -93,8 +124,8 @@ export function createAccount(input: {
   return withTransaction((database) => {
     const userId = randomUUID()
     database
-      .prepare('INSERT INTO users (id, full_name, email, password_hash) VALUES (?, ?, ?, ?)')
-      .run(userId, input.fullName, input.email, input.passwordHash)
+      .prepare('INSERT INTO users (id, full_name, first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)')
+      .run(userId, `${input.firstName} ${input.lastName}`.trim(), input.firstName, input.lastName, input.email, input.passwordHash)
 
     const farmId = randomUUID()
     database
@@ -105,6 +136,39 @@ export function createAccount(input: {
     if (input.includeDemo) seedDemo(database, userId, farmId)
     return userId
   })
+}
+
+export function updateUserProfile(ownerId: string, input: ProfileInput): User | null {
+  const products = input.products.map((item) => item.replaceAll(',', ' ').trim()).filter(Boolean).join(', ')
+  const result = getDb().prepare(`
+    UPDATE users SET full_name = ?, first_name = ?, last_name = ?, email = ?,
+      birth_date = ?, phone = ?, province = ?, municipality = ?, producer_role = ?,
+      primary_crop = ?, products = ?, preferred_contact = ?, notify_email = ?,
+      notify_whatsapp = ?, updated_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `).run(
+    `${input.firstName} ${input.lastName}`.trim(),
+    input.firstName,
+    input.lastName,
+    input.email,
+    input.birthDate,
+    input.phone,
+    input.province,
+    input.municipality,
+    input.producerRole,
+    input.primaryCrop,
+    products,
+    input.preferredContact,
+    input.notifyEmail ? 1 : 0,
+    input.notifyWhatsapp ? 1 : 0,
+    ownerId,
+  )
+  return Number(result.changes) ? getUserProfile(ownerId) : null
+}
+
+export function updatePasswordHash(ownerId: string, passwordHash: string): boolean {
+  const result = getDb().prepare('UPDATE users SET password_hash = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').run(passwordHash, ownerId)
+  return Number(result.changes) > 0
 }
 
 function seedDemo(database: ReturnType<typeof getDb>, ownerId: string, farmId: string): void {
@@ -343,21 +407,4 @@ export function createBuzzCommand(ownerId: string, deviceId: string): BuzzComman
       FROM buzz_commands WHERE id = ? AND owner_id = ?`)
     .get(id, ownerId) as unknown as BuzzCommand
   return { ...command }
-}
-
-export function createDemoRequest(input: {
-  name: string
-  phone: string
-  email: string
-  province: string
-  crop: string
-  farmSize: string
-  message: string
-}): string {
-  const id = randomUUID()
-  getDb()
-    .prepare(`INSERT INTO demo_requests (id, name, phone, email, province, crop, farm_size, message)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
-    .run(id, input.name, input.phone, input.email, input.province, input.crop, input.farmSize, input.message)
-  return id
 }

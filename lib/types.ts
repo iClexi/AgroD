@@ -1,7 +1,21 @@
 export type User = {
   id: string
   fullName: string
+  firstName: string
+  lastName: string
   email: string
+  birthDate: string | null
+  phone: string
+  province: string
+  municipality: string
+  producerRole: string
+  primaryCrop: string
+  products: string[]
+  preferredContact: 'email' | 'whatsapp' | 'phone'
+  notifyEmail: boolean
+  notifyWhatsapp: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 export type Farm = {

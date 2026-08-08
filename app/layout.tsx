@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from 'next'
-import { Atkinson_Hyperlegible, Manrope } from 'next/font/google'
+import { Inter, Sora } from 'next/font/google'
 import './globals.css'
 
-const body = Atkinson_Hyperlegible({
+const body = Inter({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
-  weight: ['400', '700'],
 })
 
-const display = Manrope({
+const display = Sora({
   subsets: ['latin'],
-  variable: '--font-display',
+  variable: '--font-heading',
   display: 'swap',
 })
 
@@ -26,6 +25,10 @@ export const metadata: Metadata = {
     locale: 'es_DO',
     title: 'AgroD | Monitoreo inteligente para cultivos dominicanos',
     description: 'Cuida tus cultivos con datos, no con adivinanzas.',
+  },
+  icons: {
+    icon: '/images/brand/agrod-logo-original.png',
+    apple: '/images/brand/agrod-logo-original.png',
   },
   robots: { index: true, follow: true },
 }

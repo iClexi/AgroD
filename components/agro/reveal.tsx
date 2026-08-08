@@ -16,20 +16,17 @@ export function Reveal({ children, as, className = '', delay = 0 }: RevealProps)
   useEffect(() => {
     const node = ref.current
     if (!node) return
-
     if (typeof IntersectionObserver === 'undefined') {
       node.classList.add('is-visible')
       return
     }
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            node.classList.add('is-visible')
-            observer.unobserve(node)
-          }
-        })
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          node.classList.add('is-visible')
+          observer.unobserve(node)
+        }
       },
       { threshold: 0.15, rootMargin: '0px 0px -8% 0px' },
     )

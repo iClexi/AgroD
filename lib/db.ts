@@ -8,9 +8,22 @@ const schema = `
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   full_name TEXT NOT NULL CHECK (length(full_name) BETWEEN 2 AND 100),
+  first_name TEXT NOT NULL DEFAULT '',
+  last_name TEXT NOT NULL DEFAULT '',
   email TEXT NOT NULL COLLATE NOCASE UNIQUE,
   password_hash TEXT NOT NULL,
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  birth_date TEXT,
+  phone TEXT NOT NULL DEFAULT '',
+  province TEXT NOT NULL DEFAULT '',
+  municipality TEXT NOT NULL DEFAULT '',
+  producer_role TEXT NOT NULL DEFAULT 'Propietario o encargado',
+  primary_crop TEXT NOT NULL DEFAULT '',
+  products TEXT NOT NULL DEFAULT '',
+  preferred_contact TEXT NOT NULL DEFAULT 'email',
+  notify_email INTEGER NOT NULL DEFAULT 1 CHECK (notify_email IN (0, 1)),
+  notify_whatsapp INTEGER NOT NULL DEFAULT 0 CHECK (notify_whatsapp IN (0, 1)),
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) STRICT;
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -83,18 +96,6 @@ CREATE TABLE IF NOT EXISTS buzz_commands (
   requested_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) STRICT;
 
-CREATE TABLE IF NOT EXISTS demo_requests (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL CHECK (length(name) BETWEEN 2 AND 100),
-  phone TEXT NOT NULL CHECK (length(phone) BETWEEN 7 AND 30),
-  email TEXT NOT NULL CHECK (length(email) BETWEEN 5 AND 160),
-  province TEXT NOT NULL CHECK (length(province) BETWEEN 2 AND 80),
-  crop TEXT NOT NULL CHECK (length(crop) BETWEEN 2 AND 100),
-  farm_size TEXT NOT NULL CHECK (length(farm_size) BETWEEN 1 AND 80),
-  message TEXT NOT NULL DEFAULT '' CHECK (length(message) <= 2000),
-  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-) STRICT;
-
 CREATE INDEX IF NOT EXISTS idx_sessions_token_expiry ON sessions(token_hash, expires_at);
 CREATE INDEX IF NOT EXISTS idx_farms_owner_updated ON farms(owner_id, updated_at DESC);
 CREATE INDEX IF NOT EXISTS idx_devices_owner_farm ON devices(owner_id, farm_id, updated_at DESC);
@@ -104,6 +105,37 @@ CREATE INDEX IF NOT EXISTS idx_buzz_owner_device ON buzz_commands(owner_id, devi
 
 const globalDatabase = globalThis as typeof globalThis & {
   __agrodDatabase?: DatabaseSync
+}
+
+function migrateUsers(database: DatabaseSync): void {
+  const existing = new Set(
+    (database.prepare('PRAGMA table_info(users)').all() as Array<{ name: string }>).map((column) => column.name),
+  )
+  const additions = [
+    ['first_name', "TEXT NOT NULL DEFAULT ''"],
+    ['last_name', "TEXT NOT NULL DEFAULT ''"],
+    ['birth_date', 'TEXT'],
+    ['phone', "TEXT NOT NULL DEFAULT ''"],
+    ['province', "TEXT NOT NULL DEFAULT ''"],
+    ['municipality', "TEXT NOT NULL DEFAULT ''"],
+    ['producer_role', "TEXT NOT NULL DEFAULT 'Propietario o encargado'"],
+    ['primary_crop', "TEXT NOT NULL DEFAULT ''"],
+    ['products', "TEXT NOT NULL DEFAULT ''"],
+    ['preferred_contact', "TEXT NOT NULL DEFAULT 'email'"],
+    ['notify_email', 'INTEGER NOT NULL DEFAULT 1'],
+    ['notify_whatsapp', 'INTEGER NOT NULL DEFAULT 0'],
+    ['updated_at', "TEXT NOT NULL DEFAULT ''"],
+  ] as const
+  for (const [name, definition] of additions) {
+    if (!existing.has(name)) database.exec(`ALTER TABLE users ADD COLUMN ${name} ${definition}`)
+  }
+  database.exec(`
+    UPDATE users
+    SET first_name = CASE WHEN instr(full_name, ' ') > 0 THEN substr(full_name, 1, instr(full_name, ' ') - 1) ELSE full_name END,
+        last_name = CASE WHEN instr(full_name, ' ') > 0 THEN trim(substr(full_name, instr(full_name, ' ') + 1)) ELSE '' END
+    WHERE first_name = '';
+    UPDATE users SET updated_at = created_at WHERE updated_at = '';
+  `)
 }
 
 export function getDb(): DatabaseSync {
@@ -120,6 +152,7 @@ export function getDb(): DatabaseSync {
   })
   database.exec('PRAGMA journal_mode = WAL; PRAGMA synchronous = NORMAL;')
   database.exec(schema)
+  migrateUsers(database)
   database.exec("DELETE FROM sessions WHERE expires_at <= datetime('now'); PRAGMA optimize;")
 
   globalDatabase.__agrodDatabase = database

@@ -4,13 +4,14 @@ import { randomUUID } from 'node:crypto'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { getDb } from '@/lib/db'
+import { getUserProfile } from '@/lib/data'
 import { createSessionToken, hashSessionToken } from '@/lib/security'
 import type { User } from '@/lib/types'
 
 const COOKIE_NAME = 'agrod_session'
 const SESSION_DAYS = 30
 
-type UserRow = { id: string; fullName: string; email: string }
+type SessionRow = { userId: string }
 
 export async function getCurrentUser(): Promise<User | null> {
   const cookieStore = await cookies()
@@ -19,20 +20,19 @@ export async function getCurrentUser(): Promise<User | null> {
 
   const row = getDb()
     .prepare(`
-      SELECT u.id, u.full_name AS fullName, u.email
+      SELECT s.user_id AS userId
       FROM sessions s
-      INNER JOIN users u ON u.id = s.user_id
       WHERE s.token_hash = ? AND s.expires_at > CURRENT_TIMESTAMP
       LIMIT 1
     `)
-    .get(hashSessionToken(token)) as UserRow | undefined
+    .get(hashSessionToken(token)) as SessionRow | undefined
 
-  return row ? { id: row.id, fullName: row.fullName, email: row.email } : null
+  return row ? getUserProfile(row.userId) : null
 }
 
-export async function requireUser(): Promise<User> {
+export async function requireUser(returnTo = '/panel'): Promise<User> {
   const user = await getCurrentUser()
-  if (!user) redirect('/iniciar-sesion?returnTo=/panel')
+  if (!user) redirect(`/iniciar-sesion?returnTo=${encodeURIComponent(returnTo)}`)
   return user
 }
 

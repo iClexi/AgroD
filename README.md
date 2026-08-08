@@ -13,7 +13,8 @@ Aplicación web de AgroTech Dominicana para presentar AgroD y gestionar fincas, 
 - Finca virtual con filas, columnas y ruta de inspección priorizada.
 - Alertas derivadas de las lecturas registradas.
 - Orden de zumbido simulada para localizar equipos compatibles.
-- Formulario de solicitud de demostración guardado en la base de datos.
+- Demo pública interactiva con lecturas, cultivos, dispositivos y alertas de ejemplo.
+- Perfil editable con datos personales, agrícolas, preferencias y equipos registrados.
 
 ## Requisitos
 
@@ -44,7 +45,7 @@ El comando ejecuta lint, comprobación de tipos, pruebas y compilación de produ
 docker compose up -d --build
 ```
 
-El servicio escucha solamente en `127.0.0.1:3010` para colocarlo detrás de un proxy inverso con HTTPS. El volumen `agrod_data` conserva usuarios, fincas y solicitudes aunque el contenedor se reconstruya.
+El servicio escucha solamente en `127.0.0.1:3010` para colocarlo detrás de un proxy inverso con HTTPS. El volumen `agrod_data` conserva usuarios, fincas, cultivos y dispositivos aunque el contenedor se reconstruya.
 
 Comprueba el servicio con:
 
@@ -52,7 +53,7 @@ Comprueba el servicio con:
 curl http://127.0.0.1:3010/api/health
 ```
 
-## Límites actuales del prototipo
+## Integraciones pendientes
 
 - El zumbador registra una orden simulada; falta integrar el firmware y la comunicación con el dispositivo físico.
 - Las lecturas se registran manualmente; falta la ingestión automática desde sensores IoT.

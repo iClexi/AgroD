@@ -1,4 +1,24 @@
 import Link from 'next/link'
-import { Logo } from '@/components/agro/logo'
+import { Logo } from './logo'
 
-export function SiteFooter() { return <footer className="border-t border-[#dce8de] bg-white"><div className="mx-auto w-full max-w-[1480px] px-4 py-12 sm:px-6 lg:px-8 xl:px-10"><div className="grid gap-10 lg:grid-cols-[1fr_auto_auto]"><div className="max-w-md"><Logo /><p className="mt-5 text-base leading-7 text-[#5f6978]">Monitoreo inteligente para cultivos dominicanos. Datos claros para decidir a tiempo.</p></div><div><p className="text-sm font-extrabold text-[#172033]">Explorar</p><ul className="mt-4 space-y-3 text-sm text-[#5f6978]"><li><a href="#como-funciona" className="hover:text-[#0d5a29]">Cómo funciona</a></li><li><a href="#producto" className="hover:text-[#0d5a29]">Producto</a></li><li><a href="#equipo" className="hover:text-[#0d5a29]">Equipo</a></li></ul></div><div><p className="text-sm font-extrabold text-[#172033]">Plataforma</p><ul className="mt-4 space-y-3 text-sm text-[#5f6978]"><li><Link href="/iniciar-sesion" className="hover:text-[#0d5a29]">Iniciar sesión</Link></li><li><Link href="/registro" className="hover:text-[#0d5a29]">Crear cuenta</Link></li><li><a href="#contacto" className="hover:text-[#0d5a29]">Solicitar demostración</a></li></ul></div></div><div className="mt-10 flex flex-col gap-3 border-t border-[#e4ebe5] pt-6 text-sm text-[#687282] sm:flex-row sm:items-center sm:justify-between"><p>© {new Date().getFullYear()} AgroD · AgroTech Dominicana.</p><p>Proyecto desarrollado en República Dominicana.</p></div></div></footer> }
+export function SiteFooter() {
+  return (
+    <footer className="border-t border-border/70 bg-secondary/40">
+      <div className="mx-auto max-w-6xl px-5 py-12 md:px-8">
+        <div className="flex flex-col justify-between gap-10 md:flex-row md:items-start">
+          <div className="max-w-sm"><Logo /><p className="mt-4 text-sm leading-relaxed text-muted-foreground">Tecnología creada para que los productores dominicanos puedan entender su finca y actuar a tiempo.</p></div>
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3">
+            <FooterColumn title="Producto" links={[['Cómo funciona', '#como-funciona'], ['Plataforma', '#plataforma'], ['Beneficios', '#beneficios']]} />
+            <FooterColumn title="Cuenta" links={[['Iniciar sesión', '/iniciar-sesion'], ['Crear cuenta', '/registro'], ['Ver demo', '#demo']]} />
+            <FooterColumn title="Empresa" links={[['Equipo', '#equipo'], ['AgroTech Dominicana', '#inicio'], ['República Dominicana', '#inicio']]} />
+          </div>
+        </div>
+        <div className="mt-10 flex flex-col gap-2 border-t border-border/70 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"><p>© {new Date().getFullYear()} AgroD · AgroTech Dominicana.</p><p>Proyecto del Grupo 4 · Desarrollo de Emprendedores.</p></div>
+      </div>
+    </footer>
+  )
+}
+
+function FooterColumn({ title, links }: { title: string; links: Array<[string, string]> }) {
+  return <div><p className="text-sm font-semibold text-foreground">{title}</p><ul className="mt-3 space-y-2">{links.map(([label, href]) => <li key={label}><Link href={href} className="text-sm text-muted-foreground transition-colors hover:text-primary">{label}</Link></li>)}</ul></div>
+}

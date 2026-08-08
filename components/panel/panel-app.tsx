@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   AlertTriangle,
   BatteryCharging,
@@ -23,6 +24,7 @@ import {
   ThermometerSun,
   Trash2,
   Volume2,
+  UserRound,
   X,
 } from 'lucide-react'
 import { Logo } from '@/components/agro/logo'
@@ -232,10 +234,11 @@ export function PanelApp({ user, initialData }: { user: User; initialData: Dashb
         </nav>
 
         <div className="mt-auto border-t border-white/10 pt-5">
-          <div className="flex items-center gap-3">
+          <Link href="/perfil" className="flex items-center gap-3 rounded-xl p-2 transition hover:bg-white/10" aria-label="Abrir mi perfil">
             <span className="flex size-10 items-center justify-center rounded-full bg-[#167a35] text-sm font-extrabold">{initials}</span>
-            <div className="min-w-0"><p className="truncate text-sm font-bold">{user.fullName}</p><p className="truncate text-xs text-white/55">{user.email}</p></div>
-          </div>
+            <div className="min-w-0 flex-1"><p className="truncate text-sm font-bold">{user.fullName}</p><p className="truncate text-xs text-white/55">{user.email}</p></div>
+            <UserRound aria-hidden="true" className="size-4 text-white/55" />
+          </Link>
           <button type="button" onClick={logout} className="mt-4 flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-sm font-bold text-white/70 hover:bg-white/10 hover:text-white"><LogOut aria-hidden="true" className="size-5" />Cerrar sesión</button>
         </div>
       </aside>

@@ -1,27 +1,52 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { Logo } from '@/components/agro/logo'
+import { Logo } from './logo'
 
 const links = [
-  ['Cómo funciona', '#como-funciona'],
-  ['Producto', '#producto'],
-  ['Beneficios', '#beneficios'],
-  ['Equipo', '#equipo'],
-  ['Contacto', '#contacto'],
-] as const
+  { label: 'Cómo funciona', href: '#como-funciona' },
+  { label: 'Plataforma', href: '#plataforma' },
+  { label: 'Beneficios', href: '#beneficios' },
+  { label: 'Equipo', href: '#equipo' },
+]
 
 export function SiteHeader() {
+  const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  return <header className="fixed inset-x-0 top-0 z-50 border-b border-[#dce8de] bg-white/95 backdrop-blur-lg">
-    <div className="mx-auto flex h-[76px] w-full max-w-[1480px] items-center gap-6 px-4 sm:px-6 lg:px-8 xl:px-10">
-      <Link href="#inicio" aria-label="Ir al inicio de AgroD" className="shrink-0 rounded-lg focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#167a35]"><Logo /></Link>
-      <nav className="ml-auto hidden items-center gap-6 xl:flex" aria-label="Navegación principal">{links.map(([label, href]) => <a key={href} href={href} className="min-h-11 content-center rounded-lg px-1 text-sm font-bold text-[#536071] hover:text-[#0d5a29] focus-visible:outline focus-visible:outline-3 focus-visible:outline-[#167a35]">{label}</a>)}</nav>
-      <div className="ml-auto hidden items-center gap-3 sm:flex xl:ml-3"><Link href="/iniciar-sesion" className="secondary-button">Iniciar sesión</Link><a href="#contacto" className="primary-button">Solicitar demostración</a></div>
-      <button type="button" className="icon-button ml-auto sm:ml-0 xl:hidden" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-nav" aria-label={open ? 'Cerrar menú' : 'Abrir menú'}>{open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}</button>
-    </div>
-    {open ? <nav id="mobile-nav" className="border-t border-[#dce8de] bg-white px-4 py-4 xl:hidden" aria-label="Navegación móvil"><div className="mx-auto grid max-w-[1480px] gap-1">{links.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="flex min-h-12 items-center rounded-xl px-3 font-bold text-[#172033] hover:bg-[#f2f8f3]">{label}</a>)}<div className="mt-3 grid gap-3 border-t border-[#dce8de] pt-4 sm:hidden"><Link href="/iniciar-sesion" className="secondary-button" onClick={() => setOpen(false)}>Iniciar sesión</Link><a href="#contacto" className="primary-button" onClick={() => setOpen(false)}>Solicitar demostración</a></div></div></nav> : null}
-  </header>
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  return (
+    <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled || open ? 'border-b border-border/70 bg-background/92 shadow-sm backdrop-blur-md' : 'border-b border-transparent'}`}>
+      <div className="mx-auto flex h-[76px] max-w-6xl items-center justify-between gap-4 px-5 md:px-8">
+        <a href="#inicio" aria-label="AgroD, volver al inicio"><Logo compact /></a>
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegación principal">
+          {links.map((link) => <a key={link.href} href={link.href} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{link.label}</a>)}
+        </nav>
+        <div className="ml-auto hidden items-center gap-2 sm:flex lg:ml-0">
+          <Link href="/iniciar-sesion" className="inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-semibold text-navy transition-colors hover:bg-secondary">Iniciar sesión</Link>
+          <a href="#demo" className="inline-flex h-10 items-center justify-center rounded-full bg-navy px-5 text-sm font-semibold text-navy-foreground shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:bg-navy/90">Ver demo</a>
+        </div>
+        <button type="button" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-navy sm:hidden" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? 'Cerrar menú' : 'Abrir menú'}>
+          {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+        </button>
+      </div>
+      {open ? (
+        <nav id="mobile-menu" className="border-t border-border/70 bg-background px-5 pb-6 pt-3 sm:hidden" aria-label="Navegación móvil">
+          <div className="mx-auto grid max-w-6xl gap-1">
+            {links.map((link) => <a key={link.href} href={link.href} onClick={() => setOpen(false)} className="flex min-h-12 items-center rounded-xl px-3 font-semibold text-foreground hover:bg-secondary">{link.label}</a>)}
+            <Link href="/iniciar-sesion" className="mt-2 inline-flex h-12 items-center justify-center rounded-full border border-border bg-card font-semibold text-navy">Iniciar sesión</Link>
+            <Link href="/registro" className="inline-flex h-12 items-center justify-center rounded-full bg-primary font-semibold text-primary-foreground">Crear cuenta</Link>
+          </div>
+        </nav>
+      ) : null}
+    </header>
+  )
 }
