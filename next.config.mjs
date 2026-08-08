@@ -21,6 +21,7 @@ const nextConfig = {
     root: projectRoot,
   },
   images: {
+    unoptimized: true,
     minimumCacheTTL: 86400,
     deviceSizes: [640, 750, 1080, 1440, 1920],
   },
