@@ -26,9 +26,9 @@ export const metadata: Metadata = {
     locale: 'es_DO',
     title: 'AgroD | Monitoreo inteligente para cultivos dominicanos',
     description: 'Cuida tus cultivos con datos, no con adivinanzas.',
-    images: [{ url: '/images/hero-field.png', width: 1536, height: 1024, alt: 'Cultivos monitoreados con AgroD' }],
+    images: [{ url: '/images/hero-field.webp', width: 1024, height: 1024, alt: 'Cultivos monitoreados con AgroD' }],
   },
-  twitter: { card: 'summary_large_image', title: 'AgroD | Monitoreo inteligente para cultivos dominicanos', description: 'Cuida tus cultivos con datos, no con adivinanzas.', images: ['/images/hero-field.png'] },
+  twitter: { card: 'summary_large_image', title: 'AgroD | Monitoreo inteligente para cultivos dominicanos', description: 'Cuida tus cultivos con datos, no con adivinanzas.', images: ['/images/hero-field.webp'] },
   robots: { index: true, follow: true },
 }
 

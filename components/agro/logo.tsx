@@ -7,14 +7,14 @@ type LogoProps = {
 
 export function Logo({ className = '', compact = false }: LogoProps) {
   return (
-    <span className={`logo-lockup relative inline-flex shrink-0 overflow-hidden ${compact ? 'h-12 w-[143px]' : 'h-[68px] w-[198px]'} ${className}`}>
+    <span className={`logo-lockup relative inline-flex shrink-0 items-center justify-center overflow-hidden ${compact ? 'h-12 w-[143px]' : 'h-[68px] w-[198px]'} ${className}`}>
       <Image
-        src="/images/brand/agrod-logo-original.png"
+        src="/images/brand/agrod-logo-header.webp"
         alt="AgroD - Monitoreo inteligente para cultivos dominicanos"
-        width={1672}
-        height={941}
+        width={600}
+        height={196}
         loading="eager"
-        className={`absolute h-auto max-w-none mix-blend-multiply ${compact ? '-left-[6px] -top-[17px] w-[155px]' : '-left-[7px] -top-[24px] w-[210px]'}`}
+        className="h-full w-full object-contain mix-blend-multiply"
       />
     </span>
   )
