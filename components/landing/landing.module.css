@@ -733,7 +733,7 @@
 }
 
 .systemNumber {
-  color: #8b978e;
+  color: #59665f;
   font-family: var(--font-heading), sans-serif;
   font-size: 0.72rem;
   font-weight: 800;
@@ -1164,7 +1164,7 @@
 }
 
 .chromeBrand small {
-  color: #738078;
+  color: #59665f;
   font-size: 0.64rem;
   margin-top: 1px;
 }
@@ -1290,7 +1290,7 @@
 
 .previewMetrics dt {
   align-items: center;
-  color: #6d7972;
+  color: #59665f;
   display: flex;
   font-size: 0.62rem;
   font-weight: 760;
@@ -1357,7 +1357,7 @@
 }
 
 .alertStrip small {
-  color: #748078;
+  color: #59665f;
   font-size: 0.64rem;
   margin-top: 2px;
 }
@@ -1497,7 +1497,7 @@
 }
 
 .deviceGrid p {
-  color: #748078;
+  color: #59665f;
   font-size: 0.62rem;
   margin: 3px 0 0;
 }
@@ -1517,7 +1517,7 @@
 
 .deviceGrid dt {
   align-items: center;
-  color: #738078;
+  color: #59665f;
   display: flex;
   font-size: 0.56rem;
   gap: 4px;
@@ -1562,7 +1562,7 @@
 
 .deviceSecondaryAction {
   background: #f5f8f4;
-  color: #6d7972;
+  color: #59665f;
 }
 
 .deviceBuzzing {
@@ -1623,7 +1623,7 @@
 }
 
 .journeyIndex {
-  color: #87958a;
+  color: #59665f;
   font-size: 0.68rem;
   font-weight: 820;
   padding-top: 15px;
@@ -1766,7 +1766,7 @@
 }
 
 .planSummary > span {
-  color: #6a7770;
+  color: #59665f;
   display: block;
   font-size: 0.75rem;
   margin-top: 7px;
@@ -1824,7 +1824,7 @@
 }
 
 .planDetails small {
-  color: #77827c;
+  color: #59665f;
   font-size: 0.67rem;
   line-height: 1.45;
   max-width: 360px;
