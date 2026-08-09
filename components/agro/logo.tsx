@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 type LogoProps = {
   className?: string
   compact?: boolean
@@ -11,9 +13,9 @@ export function Logo({ className = '', compact = false }: LogoProps) {
         alt="AgroD - Monitoreo inteligente para cultivos dominicanos"
         width={1672}
         height={941}
+        loading="eager"
         className={`absolute h-auto max-w-none mix-blend-multiply ${compact ? '-left-3 -top-[18px] w-[155px]' : '-left-[15px] -top-[25px] w-[210px]'}`}
       />
     </span>
   )
 }
-import Image from 'next/image'
