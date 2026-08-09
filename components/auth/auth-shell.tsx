@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Logo } from '@/components/agro/logo'
+import { CookieSettingsButton } from '@/components/legal/cookie-consent'
 
 export function AuthShell({
   title,
@@ -16,7 +17,7 @@ export function AuthShell({
     <main className="min-h-screen bg-[#f2f8f3] px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[minmax(0,1.05fr)_minmax(480px,0.95fr)] lg:p-0">
       <section className="relative hidden min-h-screen overflow-hidden bg-[#071f42] p-12 text-white lg:flex lg:flex-col lg:justify-between xl:p-16">
         <div aria-hidden="true" className="field-lines absolute inset-0 opacity-25" />
-        <Link href="/" className="relative w-fit rounded-xl bg-white px-4 py-3 focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-white">
+        <Link href="/" className="relative w-fit rounded-xl focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-white">
           <Logo />
         </Link>
         <div className="relative max-w-2xl">
@@ -40,6 +41,7 @@ export function AuthShell({
           <p className="mt-4 text-lg leading-7 text-[#596476]">{description}</p>
           <div className="mt-9">{children}</div>
           <div className="mt-8 border-t border-[#e4ebe5] pt-6 text-center text-base text-[#596476]">{footer}</div>
+          <nav className="mt-4 flex flex-wrap items-center justify-center gap-x-5 text-sm" aria-label="Privacidad y condiciones"><Link href="/privacidad" className="inline-flex min-h-11 items-center font-semibold text-[#596476] hover:text-[#0d5a29]">Privacidad</Link><Link href="/terminos" className="inline-flex min-h-11 items-center font-semibold text-[#596476] hover:text-[#0d5a29]">Términos</Link><CookieSettingsButton /></nav>
         </div>
       </section>
     </main>

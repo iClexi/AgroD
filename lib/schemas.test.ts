@@ -8,6 +8,7 @@ describe('registerSchema', () => {
       lastName: 'Rodríguez',
       email: '  PRODUCTORA@EJEMPLO.COM ',
       password: 'AgroD2026Segura',
+      acceptedLegal: true,
     })
 
     expect(result.email).toBe('productora@ejemplo.com')
@@ -20,6 +21,7 @@ describe('registerSchema', () => {
       lastName: 'Rodríguez',
       email: 'productora@ejemplo.com',
       password: 'sololetrasseguras',
+      acceptedLegal: true,
     })
 
     expect(result.success).toBe(false)
@@ -29,6 +31,18 @@ describe('registerSchema', () => {
     const result = registerSchema.safeParse({
       firstName: 'A'.repeat(50),
       lastName: 'B'.repeat(51),
+      email: 'productora@ejemplo.com',
+      password: 'AgroD2026Segura',
+      acceptedLegal: true,
+    })
+
+    expect(result.success).toBe(false)
+  })
+
+  it('rechaza registros sin aceptación legal', () => {
+    const result = registerSchema.safeParse({
+      firstName: 'María',
+      lastName: 'Rodríguez',
       email: 'productora@ejemplo.com',
       password: 'AgroD2026Segura',
     })

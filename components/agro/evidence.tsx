@@ -16,7 +16,7 @@ const answers = [
 export function Evidence() {
   return (
     <section className="bg-navy py-16 text-navy-foreground md:py-20">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1500px] px-5 md:px-8">
         <div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-wider text-[#8ed09f]">El problema que validamos</p>

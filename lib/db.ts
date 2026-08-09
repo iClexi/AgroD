@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS users (
   preferred_contact TEXT NOT NULL DEFAULT 'email',
   notify_email INTEGER NOT NULL DEFAULT 1 CHECK (notify_email IN (0, 1)),
   notify_whatsapp INTEGER NOT NULL DEFAULT 0 CHECK (notify_whatsapp IN (0, 1)),
+  legal_version TEXT NOT NULL DEFAULT '',
+  legal_accepted_at TEXT,
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) STRICT;
@@ -124,6 +126,8 @@ function migrateUsers(database: DatabaseSync): void {
     ['preferred_contact', "TEXT NOT NULL DEFAULT 'email'"],
     ['notify_email', 'INTEGER NOT NULL DEFAULT 1'],
     ['notify_whatsapp', 'INTEGER NOT NULL DEFAULT 0'],
+    ['legal_version', "TEXT NOT NULL DEFAULT ''"],
+    ['legal_accepted_at', 'TEXT'],
     ['updated_at', "TEXT NOT NULL DEFAULT ''"],
   ] as const
   for (const [name, definition] of additions) {

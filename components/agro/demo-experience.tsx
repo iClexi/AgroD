@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AlertTriangle, ArrowRight, BatteryCharging, Bell, CheckCircle2, Droplets, LayoutDashboard, MapPinned, Radio, Route, Signal, Sprout, ThermometerSun, Volume2 } from 'lucide-react'
 import { Logo } from './logo'
 import { Reveal } from './reveal'
@@ -19,6 +19,34 @@ export function DemoExperience() {
   const [view, setView] = useState<DemoView>('resumen')
   const [buzzed, setBuzzed] = useState(false)
 
+  useEffect(() => {
+    if (window.localStorage.getItem('agrod-cookie-consent-v1') !== 'all') return
+    const saved = window.localStorage.getItem('agrod-demo-view') as DemoView | null
+    if (!saved || !views.some((item) => item.id === saved)) return
+    const timer = window.setTimeout(() => setView(saved), 0)
+    return () => window.clearTimeout(timer)
+  }, [])
+
+  useEffect(() => {
+    const selectFromHash = () => {
+      const nextView = window.location.hash.replace('#demo-', '') as DemoView
+      if (!views.some((item) => item.id === nextView)) return
+      setView(nextView)
+      if (window.localStorage.getItem('agrod-cookie-consent-v1') === 'all') window.localStorage.setItem('agrod-demo-view', nextView)
+    }
+    const timer = window.setTimeout(selectFromHash, 0)
+    window.addEventListener('hashchange', selectFromHash)
+    return () => {
+      window.clearTimeout(timer)
+      window.removeEventListener('hashchange', selectFromHash)
+    }
+  }, [])
+
+  function selectView(nextView: DemoView) {
+    setView(nextView)
+    if (window.localStorage.getItem('agrod-cookie-consent-v1') === 'all') window.localStorage.setItem('agrod-demo-view', nextView)
+  }
+
   function buzz() {
     setBuzzed(true)
     window.setTimeout(() => setBuzzed(false), 3500)
@@ -26,7 +54,7 @@ export function DemoExperience() {
 
   return (
     <section id="demo" className="py-10">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1500px] px-5 md:px-8">
         <Reveal className="overflow-hidden rounded-[2rem] bg-navy text-navy-foreground shadow-[0_40px_100px_-55px_rgba(7,31,66,.85)]">
           <div className="grid lg:grid-cols-[.65fr_1.35fr]">
             <div className="relative overflow-hidden px-6 py-10 md:px-8 lg:py-12">
@@ -41,8 +69,8 @@ export function DemoExperience() {
               <div aria-hidden="true" className="demo-data-sweep" />
               <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 px-4 py-3 sm:px-5"><Logo compact /><div className="flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-xs font-semibold text-navy"><span className="relative flex size-2"><span className="signal-ping absolute inline-flex size-full rounded-full bg-primary" /><span className="relative inline-flex size-2 rounded-full bg-primary" /></span>Finca demostrativa</div></div>
-                <nav className="grid grid-cols-2 border-b border-border/70 bg-background/70 sm:grid-cols-4" aria-label="Vistas de la demostración">{views.map((item) => <button type="button" key={item.id} onClick={() => setView(item.id)} className={`flex min-h-12 items-center justify-center gap-2 px-2 text-xs font-semibold transition-colors ${view === item.id ? 'bg-card text-primary shadow-[inset_0_-2px_0_var(--primary)]' : 'text-muted-foreground hover:bg-card hover:text-foreground'}`}><item.icon aria-hidden="true" className="size-4" />{item.label}</button>)}</nav>
-                <div key={view} className="demo-panel-in min-h-[390px] p-4 sm:p-5">
+                <nav className="grid grid-cols-2 border-b border-border/70 bg-background/70 sm:grid-cols-4" aria-label="Vistas de la demostración">{views.map((item) => <button type="button" id={`demo-${item.id}`} key={item.id} onClick={() => selectView(item.id)} aria-pressed={view === item.id} aria-controls="demo-panel" className={`flex min-h-12 scroll-mt-24 items-center justify-center gap-2 px-2 text-xs font-semibold transition-colors ${view === item.id ? 'bg-card text-primary shadow-[inset_0_-2px_0_var(--primary)]' : 'text-muted-foreground hover:bg-card hover:text-foreground'}`}><item.icon aria-hidden="true" className="size-4" />{item.label}</button>)}</nav>
+                <div id="demo-panel" role="region" aria-live="polite" key={view} className="demo-panel-in min-h-[390px] p-4 sm:p-5">
                   {view === 'resumen' ? <SummaryDemo /> : null}
                   {view === 'cultivos' ? <CropsDemo /> : null}
                   {view === 'dispositivos' ? <DevicesDemo buzzed={buzzed} onBuzz={buzz} /> : null}

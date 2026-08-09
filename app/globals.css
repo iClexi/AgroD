@@ -28,7 +28,7 @@
   --background: #f9fbf7;
   --foreground: #172033;
   --card: #ffffff;
-  --primary: #258d46;
+  --primary: #167a35;
   --primary-foreground: #ffffff;
   --secondary: #eef6ee;
   --secondary-foreground: #173b2a;
@@ -39,7 +39,7 @@
   --destructive: #c43d34;
   --border: #d8e4d8;
   --input: #cad7cc;
-  --ring: #258d46;
+  --ring: #167a35;
   --navy: #071f42;
   --navy-foreground: #f8fbf7;
   --agrod-green: #167a35;
@@ -62,6 +62,7 @@ button:disabled { cursor: not-allowed; opacity: .58; }
 .font-display { font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif; }
 .section-kicker { color: var(--agrod-green); font-size: .78rem; font-weight: 800; letter-spacing: .16em; line-height: 1.4; text-transform: uppercase; }
 .field-lines { background-image: repeating-radial-gradient(ellipse at 110% 28%, transparent 0 25px, rgba(22,122,53,.10) 27px 29px, transparent 31px 52px); }
+.logo-lockup { background: rgba(255,255,255,.94); border: 1px solid rgba(13,90,41,.14); border-radius: .9rem; box-shadow: 0 10px 28px -24px rgba(7,31,66,.8); isolation: isolate; }
 
 .text-balance { text-wrap: balance; }
 .text-pretty { text-wrap: pretty; }
@@ -93,12 +94,11 @@ button:disabled { cursor: not-allowed; opacity: .58; }
 @keyframes demo-sweep { 0%,28% { transform: translateX(-110%); } 72%,100% { transform: translateX(110%); } }
 @keyframes flow-travel { 0%,10% { left: 6%; } 45%,55% { left: 50%; } 90%,100% { left: 93%; } }
 
-.team-photo { background: #eef1ef; border-radius: 1rem; height: 170px; overflow: hidden; position: relative; }
-.team-photo img { height: auto; max-width: none; position: absolute; width: 1216px; }
-.team-photo-michael img { left: -500px; top: -128px; }
-.team-photo-sussette img { left: -157px; top: -529px; }
-.team-photo-luis img { left: -498px; top: -529px; }
-.team-photo-dionela img { left: -840px; top: -529px; }
+.team-photo { aspect-ratio: 1; background-color: #eef1ef; background-image: url('/images/brand/equipo-agrod.png'); background-repeat: no-repeat; border: 1px solid #dce8de; border-radius: 1rem; overflow: hidden; }
+.team-photo-michael { background-position: 50.3% 19.8%; background-size: 566% auto; }
+.team-photo-sussette { background-position: 15.8% 75.4%; background-size: 630% auto; }
+.team-photo-luis { background-position: 50.3% 75.4%; background-size: 630% auto; }
+.team-photo-dionela { background-position: 82.6% 75.4%; background-size: 630% auto; }
 
 .primary-button, .secondary-button, .danger-button {
   align-items: center; border-radius: .85rem; display: inline-flex; font-weight: 800; gap: .55rem; justify-content: center; min-height: 46px; padding: .72rem 1.18rem; text-decoration: none; transition: background-color .18s ease, border-color .18s ease, color .18s ease, transform .18s ease, box-shadow .18s ease;

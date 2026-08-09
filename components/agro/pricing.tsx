@@ -7,7 +7,7 @@ const included = ['Panel web y acceso móvil', 'Fincas, cultivos y dispositivos'
 export function Pricing() {
   return (
     <section id="precios" className="bg-secondary/40 py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1500px] px-5 md:px-8">
         <Reveal className="grid gap-5 lg:grid-cols-[.85fr_1.15fr] lg:items-end">
           <div><p className="text-sm font-semibold uppercase tracking-wider text-primary">Oferta de referencia</p><h2 className="mt-3 text-balance font-display text-4xl font-bold leading-tight text-foreground md:text-5xl">Empieza con la finca que ya tienes.</h2></div>
           <p className="max-w-2xl leading-7 text-muted-foreground lg:justify-self-end">Una referencia comercial clara para combinar equipos, instalación y la plataforma. El precio final depende del área y la conectividad disponible.</p>

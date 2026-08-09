@@ -22,6 +22,7 @@ export const registerSchema = z.object({
   email: z.string().trim().toLowerCase().email('Escribe un correo válido.').max(160),
   password: passwordSchema,
   includeDemo: z.boolean().optional().default(true),
+  acceptedLegal: z.literal(true, { error: 'Debes aceptar los Términos de uso y el Aviso de privacidad.' }),
 }).refine(fullNameFits, {
   message: 'El nombre y el apellido juntos no pueden superar 100 caracteres.',
   path: ['lastName'],

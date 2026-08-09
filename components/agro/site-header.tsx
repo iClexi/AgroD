@@ -23,9 +23,23 @@ export function SiteHeader() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    if (!open) return
+    const previousOverflow = document.body.style.overflow
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [open])
+
   return (
     <header className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled || open ? 'border-b border-border/70 bg-background/92 shadow-sm backdrop-blur-md' : 'border-b border-transparent'}`}>
-      <div className="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-4 px-5 md:px-8">
+      <div className="mx-auto flex h-[76px] max-w-[1500px] items-center justify-between gap-4 px-5 md:px-8">
         <a href="#inicio" aria-label="AgroD, volver al inicio"><Logo compact /></a>
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Navegación principal">
           {links.map((link) => <a key={link.href} href={link.href} className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">{link.label}</a>)}

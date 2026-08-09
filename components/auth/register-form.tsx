@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, LoaderCircle } from 'lucide-react'
@@ -15,6 +16,11 @@ export function RegisterForm() {
     setPending(true)
     setError('')
     const data = new FormData(event.currentTarget)
+    if (data.get('acceptLegal') !== 'on') {
+      setError('Debes aceptar los Términos de uso y confirmar el Aviso de privacidad para crear la cuenta.')
+      setPending(false)
+      return
+    }
     try {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
@@ -25,6 +31,7 @@ export function RegisterForm() {
           email: data.get('email'),
           password: data.get('password'),
           includeDemo: data.get('includeDemo') === 'on',
+          acceptedLegal: data.get('acceptLegal') === 'on',
         }),
       })
       const body = (await response.json()) as { error?: string }
@@ -58,7 +65,7 @@ export function RegisterForm() {
             {showPassword ? <EyeOff aria-hidden="true" className="size-5" /> : <Eye aria-hidden="true" className="size-5" />}
           </button>
         </span>
-        <span id="password-help" className="mt-2 block text-sm text-[#6b7483]">Mínimo 10 caracteres, una letra y un número.</span>
+        <span id="password-help" className="mt-2 block text-sm text-[#5f6978]">Mínimo 10 caracteres, una letra y un número.</span>
       </label>
       <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#dce8de] bg-[#f6f8fa] p-4">
         <input className="mt-1 size-5 accent-[#167a35]" name="includeDemo" type="checkbox" defaultChecked />
@@ -67,11 +74,15 @@ export function RegisterForm() {
           <span className="mt-1 block text-sm leading-6 text-[#596476]">Agrega cultivos y dispositivos de muestra para aprender el panel. Podrás eliminarlos.</span>
         </span>
       </label>
+      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-[#dce8de] bg-white p-4">
+        <input className="mt-1 size-5 accent-[#167a35]" name="acceptLegal" type="checkbox" required />
+        <span className="text-sm leading-6 text-[#596476]">Acepto los <Link href="/terminos" target="_blank" rel="noreferrer" className="font-bold text-[#0d5a29] underline underline-offset-4">Términos de uso</Link> y confirmo que leí el <Link href="/privacidad" target="_blank" rel="noreferrer" className="font-bold text-[#0d5a29] underline underline-offset-4">Aviso de privacidad</Link>.</span>
+      </label>
       <button className="primary-button w-full" type="submit" disabled={pending}>
         {pending ? <LoaderCircle aria-hidden="true" className="size-5 animate-spin" /> : null}
         {pending ? 'Creando cuenta…' : 'Crear cuenta'}
       </button>
-      <p className="text-sm leading-6 text-[#6b7483]">Los datos de muestra sirven para conocer la plataforma. Cuando conectes equipos reales, tus lecturas quedarán separadas de la demostración.</p>
+      <p className="text-sm leading-6 text-[#5f6978]">Los datos de muestra sirven para conocer la plataforma. Cuando conectes equipos reales, tus lecturas quedarán separadas de la demostración.</p>
     </form>
   )
 }

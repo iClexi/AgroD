@@ -15,6 +15,7 @@ export function Hero() {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     let raf = 0
     const onScroll = () => {
       window.cancelAnimationFrame(raf)
@@ -28,10 +29,10 @@ export function Hero() {
   }, [])
 
   return (
-    <section id="inicio" className="relative overflow-hidden pb-14 pt-24 md:pb-16 md:pt-28">
+    <section id="inicio" className="relative overflow-hidden pb-12 pt-20 sm:pb-14 sm:pt-24 md:pb-16 md:pt-28">
       <div aria-hidden="true" className="organic-hero-bg pointer-events-none absolute inset-x-0 top-0 -z-10 h-[520px]" />
 
-      <div className="mx-auto max-w-7xl px-5 md:px-8">
+      <div className="mx-auto max-w-[1500px] px-5 md:px-8">
         <div className="grid items-center gap-9 lg:grid-cols-[1.02fr_.98fr]">
           <div className="hero-copy-in">
             <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3.5 py-1.5 text-[11px] font-semibold uppercase leading-5 tracking-wider text-primary sm:text-xs">
@@ -39,18 +40,18 @@ export function Hero() {
                 <span className="signal-ping absolute inline-flex h-full w-full rounded-full bg-primary" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
               </span>
-              Monitoreo inteligente para cultivos dominicanos
+              <span className="sm:hidden">Monitoreo inteligente para tu finca</span><span className="hidden sm:inline">Monitoreo inteligente para cultivos dominicanos</span>
             </span>
 
-            <h1 className="mt-5 text-balance font-display text-[2.65rem] font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-6xl lg:text-[3.65rem]">
+            <h1 className="mt-4 text-balance font-display text-[2.25rem] font-extrabold leading-[1.04] tracking-tight text-foreground sm:mt-5 sm:text-6xl lg:text-[3.65rem]">
               Tu finca te dice qué necesita. <span className="text-primary">AgroD te dice dónde empezar.</span>
             </h1>
 
-            <p className="mt-5 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:mt-5 sm:text-lg">
               Sensores, alertas y mapa en una sola vista para detectar humedad baja, priorizar cultivos y encontrar cada dispositivo sin recorrer la finca a ciegas.
             </p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:items-center">
               <a href="#demo" className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
                 Ver AgroD en acción
                 <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -78,7 +79,7 @@ export function Hero() {
                 width={1536}
                 height={1024}
                 priority
-                className="h-[390px] w-full object-cover md:h-[450px]"
+                className="h-[310px] w-full object-cover sm:h-[390px] md:h-[450px]"
                 style={{ transform: `translateY(-${offset * 0.35}px) scale(1.08)` }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy/30 via-transparent to-transparent" />

@@ -120,11 +120,12 @@ export function createAccount(input: {
   email: string
   passwordHash: string
   includeDemo: boolean
+  acceptedLegal: true
 }): string {
   return withTransaction((database) => {
     const userId = randomUUID()
     database
-      .prepare('INSERT INTO users (id, full_name, first_name, last_name, email, password_hash) VALUES (?, ?, ?, ?, ?, ?)')
+      .prepare("INSERT INTO users (id, full_name, first_name, last_name, email, password_hash, legal_version, legal_accepted_at) VALUES (?, ?, ?, ?, ?, ?, '1', CURRENT_TIMESTAMP)")
       .run(userId, `${input.firstName} ${input.lastName}`.trim(), input.firstName, input.lastName, input.email, input.passwordHash)
 
     const farmId = randomUUID()
