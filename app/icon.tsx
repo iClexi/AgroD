@@ -10,7 +10,6 @@ export default async function Icon() {
   const brandLogo = logoFile.buffer.slice(logoFile.byteOffset, logoFile.byteOffset + logoFile.byteLength) as ArrayBuffer
   return new ImageResponse(
     <div style={{ alignItems: 'center', background: '#ffffff', border: '2px solid #d8e4d8', borderRadius: 16, display: 'flex', height: '64px', justifyContent: 'center', overflow: 'hidden', position: 'relative', width: '64px' }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img alt="" src={brandLogo as unknown as string} width="229" height="129" style={{ height: '129px', left: '-23px', position: 'absolute', top: '-27px', width: '229px' }} />
     </div>,
     size,

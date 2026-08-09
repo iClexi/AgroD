@@ -10,7 +10,6 @@ export default async function AppleIcon() {
   const brandLogo = logoFile.buffer.slice(logoFile.byteOffset, logoFile.byteOffset + logoFile.byteLength) as ArrayBuffer
   return new ImageResponse(
     <div style={{ alignItems: 'center', background: '#ffffff', border: '4px solid #d8e4d8', borderRadius: 42, display: 'flex', height: '180px', justifyContent: 'center', overflow: 'hidden', position: 'relative', width: '180px' }}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img alt="" src={brandLogo as unknown as string} width="645" height="363" style={{ height: '363px', left: '-65px', position: 'absolute', top: '-75px', width: '645px' }} />
     </div>,
     size,

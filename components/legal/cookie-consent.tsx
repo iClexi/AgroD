@@ -29,7 +29,7 @@ export function CookieConsent() {
   if (!open) return null
 
   return (
-    <aside role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-description" className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-3xl rounded-2xl border border-border bg-card p-5 shadow-[0_24px_80px_-24px_rgba(7,31,66,.55)] sm:inset-x-5 sm:p-6">
+    <div role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-description" className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-3xl rounded-2xl border border-border bg-card p-5 shadow-[0_24px_80px_-24px_rgba(7,31,66,.55)] sm:inset-x-5 sm:p-6">
       <div className="flex items-start gap-4">
         <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary"><Cookie aria-hidden="true" className="size-5" /></span>
         <div className="min-w-0 flex-1">
@@ -45,7 +45,7 @@ export function CookieConsent() {
           </div>
         </div>
       </div>
-    </aside>
+    </div>
   )
 }
 
