@@ -32,7 +32,7 @@ export function SiteHeader() {
         </nav>
         <div className="ml-auto hidden items-center gap-2 sm:flex lg:ml-0">
           <Link href="/iniciar-sesion" className="inline-flex h-10 items-center justify-center rounded-full px-4 text-sm font-semibold text-navy transition-colors hover:bg-secondary">Iniciar sesión</Link>
-          <a href="#demo" className="inline-flex h-10 items-center justify-center rounded-full bg-navy px-5 text-sm font-semibold text-navy-foreground shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:bg-navy/90">Ver demo</a>
+          <a href="#demo" className="inline-flex h-10 items-center justify-center rounded-full bg-navy px-5 text-sm font-semibold text-navy-foreground shadow-sm transition-transform duration-200 hover:-translate-y-0.5 hover:bg-navy/90">Probar AgroD</a>
         </div>
         <button type="button" className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card text-navy sm:hidden" onClick={() => setOpen((value) => !value)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? 'Cerrar menú' : 'Abrir menú'}>
           {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}

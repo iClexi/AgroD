@@ -13,8 +13,8 @@ export function Journey() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <Reveal className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-wider text-primary">Cómo funciona</p>
-          <h2 className="mt-3 text-balance font-display text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">Del campo a tu decisión, en un solo flujo</h2>
-          <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">La tecnología trabaja en segundo plano. Tú recibes la información que necesitas para decidir qué revisar y qué hacer.</p>
+          <h2 className="mt-3 text-balance font-display text-4xl font-bold leading-tight tracking-tight text-foreground md:text-5xl">Instala, conecta y empieza por la prioridad</h2>
+          <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">El equipo recoge las señales y AgroD las organiza. Tú abres una sola vista para decidir qué revisar y qué hacer.</p>
         </Reveal>
 
         <div className="relative mt-16">

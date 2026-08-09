@@ -5,10 +5,10 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { ArrowRight, Droplets, Play, Thermometer } from 'lucide-react'
 
-const evidence = [
-  { value: '10/12', label: 'dependían del monitoreo manual' },
-  { value: '9/12', label: 'indicaron que reaccionaban tarde' },
-  { value: '24/7', label: 'seguimiento disponible en la plataforma' },
+const outcomes = [
+  { value: 'Prioridad', label: 'qué revisar primero' },
+  { value: 'Ubicación', label: 'dónde está cada cultivo' },
+  { value: 'Contexto', label: 'lecturas y alertas juntas' },
 ]
 
 export function Hero() {
@@ -34,25 +34,25 @@ export function Hero() {
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="hero-copy-in">
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+            <span className="inline-flex max-w-full items-center gap-2 whitespace-normal rounded-2xl border border-primary/25 bg-primary/8 px-3.5 py-1.5 text-center text-[11px] font-semibold uppercase leading-5 tracking-wider text-primary sm:rounded-full sm:text-xs">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="signal-ping absolute inline-flex h-full w-full rounded-full bg-primary" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
               </span>
-              AgriTech Dominicana
+              Monitoreo inteligente para fincas dominicanas
             </span>
 
-            <h1 className="mt-6 text-balance font-display text-5xl font-extrabold leading-[1.03] tracking-tight text-foreground sm:text-6xl lg:text-[4.2rem]">
-              Monitorea tus cultivos. <span className="text-primary">Decide a tiempo.</span>
+            <h1 className="mt-6 text-balance font-display text-[2.65rem] font-extrabold leading-[1.04] tracking-tight text-foreground sm:text-6xl lg:text-[4rem]">
+              Detecta a tiempo lo que tu cultivo necesita. <span className="text-primary">Protege tu cosecha.</span>
             </h1>
 
             <p className="mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground">
-              AgroD conecta sensores instalados en tu finca con una plataforma sencilla. Ves qué ocurre, qué cultivo revisar primero y dónde encontrarlo.
+              AgroD convierte humedad, temperatura y riesgo en prioridades claras: qué revisar primero, dónde está y qué acción considerar.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
               <a href="#demo" className="group inline-flex h-12 items-center justify-center gap-2 rounded-full bg-primary px-7 text-sm font-semibold text-primary-foreground shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-                Explorar la demo
+                Probar con datos de ejemplo
                 <ArrowRight aria-hidden="true" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a href="#como-funciona" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-card px-7 text-sm font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40">
@@ -63,7 +63,7 @@ export function Hero() {
             </div>
 
             <dl className="mt-12 grid max-w-lg grid-cols-3 gap-5 border-t border-border/70 pt-6">
-              {evidence.map((stat) => (
+              {outcomes.map((stat) => (
                 <div key={stat.label}>
                   <dt className="font-display text-2xl font-bold text-navy">{stat.value}</dt>
                   <dd className="mt-1 text-xs leading-snug text-muted-foreground">{stat.label}</dd>
